@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: expense-api
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - { key: APP_ROLE, value: api }
+      - { key: APP_TZ, value: Asia/Yangon }
+      - { key: GEMINI_MODEL, value: gemini-2.5-flash }
+      - { key: CORS_ORIGIN, sync: false }
+      - { key: DATABASE_URL, sync: false }
+      - { key: SUPABASE_URL, sync: false }
+      - { key: SUPABASE_ANON_KEY, sync: false }
+      - { key: SUPABASE_JWT_SECRET, sync: false }
+      - { key: SUPABASE_SERVICE_KEY, sync: false }
+      - { key: GEMINI_API_KEY, sync: false }
+  - type: web
+    name: expense-bot
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - { key: APP_ROLE, value: bot }
+      - { key: APP_TZ, value: Asia/Yangon }
+      - { key: GEMINI_MODEL, value: gemini-2.5-flash }
+      - { key: DATABASE_URL, sync: false }
+      - { key: SUPABASE_URL, sync: false }
+      - { key: SUPABASE_SERVICE_KEY, sync: false }
+      - { key: TELEGRAM_BOT_TOKEN, sync: false }
+      - { key: TELEGRAM_WEBHOOK_SECRET, sync: false }
+      - { key: GEMINI_API_KEY, sync: false }
+  - type: web
+    name: expense-web
+    runtime: static
+    rootDir: web
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    envVars:
+      - { key: VITE_API_URL, sync: false }
+      - { key: VITE_SUPABASE_URL, sync: false }
+      - { key: VITE_SUPABASE_ANON_KEY, sync: false }
+      - { key: VITE_BOT_USERNAME, sync: false }

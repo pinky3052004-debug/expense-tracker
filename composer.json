@@ -1,0 +1,10 @@
+{
+  "name": "me/expense-tracker",
+  "require": {
+    "php": "^8.2",
+    "ext-pdo": "*",
+    "ext-curl": "*",
+    "firebase/php-jwt": "^6.10"
+  },
+  "autoload": { "psr-4": { "App\\": "src/" } }
+}
