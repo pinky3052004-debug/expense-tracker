@@ -23,9 +23,19 @@ final class Request
     public function header(string $name): ?string
     {
         $key = 'HTTP_' . strtoupper(str_replace('-', '_', $name));
-        return $_SERVER[$key] ?? null;
-    }
+        if (isset($_SERVER[$key])) return $_SERVER[$key];
 
+        if (strcasecmp($name, 'Authorization') === 0 && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+            return $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+        }
+        if (function_exists('getallheaders')) {
+            foreach (getallheaders() as $k => $v) {
+                if (strcasecmp($k, $name) === 0) return $v;
+            }
+        }
+        return null;
+    }
+    
     public function bearer(): ?string
     {
         $h = $this->header('Authorization');
